@@ -1,0 +1,18 @@
+[
+  {
+    "Key": "game_title",
+    "Default": "Game Title"
+  },
+  {
+    "Key": "start_game",
+    "Default": "Start Game"
+  },
+  {
+    "Key": "exit_game",
+    "Default": "Exit Game"
+  },
+  {
+    "Key": "draw_here",
+    "Default": "Draw your world here"
+  }
+]
