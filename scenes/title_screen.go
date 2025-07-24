@@ -11,7 +11,6 @@ import (
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/joelschutz/stagehand"
 )
 
 type TitleScene struct {
@@ -22,8 +21,8 @@ type TitleScene struct {
 func (s *TitleScene) Update() error {
 	_ = s.BaseScene.Update()
 	s.ui.Update()
-	if s.state.InputHandler.ActionIsJustPressed(gamestate.ActionNext) {
-		s.sm.SwitchTo(&GameScene{})
+	if gamestate.STATE.InputHandler.ActionIsJustPressed(gamestate.ActionNext) {
+		gamestate.STATE.TransitionScene(gamestate.SceneGame)
 	}
 	return nil
 }
@@ -32,13 +31,11 @@ func (s *TitleScene) Draw(screen *ebiten.Image) {
 	s.ui.Draw(screen)
 }
 
-func (s *TitleScene) Load(state *gamestate.GameState, manager stagehand.SceneController[*gamestate.GameState]) {
-	s.BaseScene.Load(state, manager)
-
+func (s *TitleScene) OnStart() {
 	slog.Info("Setting up UI")
 	if s.ui == nil {
-		titleFace, _ := s.state.ResourceMgr.Font.GetFace(fontmanager.STANDARD_NORMAL, 40)
-		buttonFace, _ := s.state.ResourceMgr.Font.GetFace(fontmanager.STANDARD_NORMAL, 16)
+		titleFace, _ := gamestate.STATE.ResourceMgr.Font.GetFace(fontmanager.STANDARD_NORMAL, 40)
+		buttonFace, _ := gamestate.STATE.ResourceMgr.Font.GetFace(fontmanager.STANDARD_NORMAL, 16)
 		buttonImage, _ := loadButtonImage()
 
 		rootContainer := widget.NewContainer(
@@ -59,7 +56,7 @@ func (s *TitleScene) Load(state *gamestate.GameState, manager stagehand.SceneCon
 			)),
 		)
 		label1 := widget.NewText(
-			widget.TextOpts.Text(state.T("game_title"), titleFace, color.White),
+			widget.TextOpts.Text(gamestate.STATE.T("game_title"), titleFace, color.White),
 			widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
 			widget.TextOpts.WidgetOpts(
 				widget.WidgetOpts.LayoutData(widget.RowLayoutData{
@@ -84,7 +81,7 @@ func (s *TitleScene) Load(state *gamestate.GameState, manager stagehand.SceneCon
 
 			// specify the button's text, the font face, and the color
 			//widget.ButtonOpts.Text("Hello, World!", face, &widget.ButtonTextColor{
-			widget.ButtonOpts.Text(state.T("start_game"), buttonFace, &widget.ButtonTextColor{
+			widget.ButtonOpts.Text(gamestate.STATE.T("start_game"), buttonFace, &widget.ButtonTextColor{
 				Idle:  color.NRGBA{0xdf, 0xf4, 0xff, 0xff},
 				Hover: color.NRGBA{0, 255, 128, 255},
 			}),
@@ -98,7 +95,7 @@ func (s *TitleScene) Load(state *gamestate.GameState, manager stagehand.SceneCon
 
 			// add a handler that reacts to clicking the button
 			widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
-				s.sm.SwitchTo(&GameScene{})
+				gamestate.STATE.TransitionScene(gamestate.SceneGame)
 			}),
 		)
 
@@ -119,7 +116,7 @@ func (s *TitleScene) Load(state *gamestate.GameState, manager stagehand.SceneCon
 
 			// specify the button's text, the font face, and the color
 			//widget.ButtonOpts.Text("Hello, World!", face, &widget.ButtonTextColor{
-			widget.ButtonOpts.Text(state.T("exit_game"), buttonFace, &widget.ButtonTextColor{
+			widget.ButtonOpts.Text(gamestate.STATE.T("exit_game"), buttonFace, &widget.ButtonTextColor{
 				Idle:  color.NRGBA{0xdf, 0xf4, 0xff, 0xff},
 				Hover: color.NRGBA{0, 255, 128, 255},
 			}),

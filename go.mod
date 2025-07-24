@@ -8,7 +8,7 @@ require (
 	github.com/bird-mtn-dev/resource-manager v0.0.0-20250615161829-f2951df71c0c
 	github.com/eduardolat/goeasyi18n v1.3.0
 	github.com/hajimehoshi/ebiten/v2 v2.8.8
-	github.com/joelschutz/stagehand v1.1.1
+	github.com/noppikinatta/bamenn v0.2.0
 	github.com/quasilyte/ebitengine-input v0.9.2-0.20240502111835-d638ebdced8c
 	github.com/setanarut/kamera/v2 v2.96.2
 	golang.org/x/image v0.28.0

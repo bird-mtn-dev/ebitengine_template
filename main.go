@@ -12,7 +12,6 @@ import (
 	resourcemanager "github.com/bird-mtn-dev/resource-manager"
 	"github.com/eduardolat/goeasyi18n"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/joelschutz/stagehand"
 	input "github.com/quasilyte/ebitengine-input"
 )
 
@@ -25,16 +24,11 @@ func main() {
 	ebiten.SetWindowTitle("Ebitengine Template")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
-	state := newGameState()
+	gamestate.STATE = newGameState()
 
-	slog.Info("Setting up stagehand")
-	s := &scenes.TitleScene{}
-	sm := stagehand.NewSceneManager(s, state)
-
-	if err := ebiten.RunGame(sm); err != nil {
+	if err := ebiten.RunGame(gamestate.STATE.TransitionScene(gamestate.SceneTitle)); err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 func setupLogger() {
@@ -88,6 +82,10 @@ func newGameState() *gamestate.GameState {
 	gameState.I18n.AddLanguage("en", enTranslations)
 
 	gameState.T = gameState.I18n.NewLangTranslateFunc("en")
+
+	slog.Info("Setting up Scene Map")
+	gameState.AddScene(gamestate.SceneGame, &scenes.GameScene{})
+	gameState.AddScene(gamestate.SceneTitle, &scenes.TitleScene{})
 
 	return gameState
 }
